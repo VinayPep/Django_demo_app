@@ -6,6 +6,15 @@ from .serializer import *
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
+class RegisterAPI(APIView):
+    def post(self,request):
+        serializer = CredentialSerializer(data = request.data)
+        #password can be hashed by hash_algo(request.data['password'])
+        if not serializer.is_valid():
+            return Response({'status':400,'message':'Given data is wrong'})
+        else:
+            serializer.save()
+            return Response({'status':201,'payload':serializer.data,'message':'User is created successfully'})
 
 
 class UserAPI(APIView):
